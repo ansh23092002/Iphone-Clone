@@ -16,11 +16,10 @@ export default [
         sourceType: 'module',
       },
     },
-    plugins: [
-      'react-hooks',
-      'react-refresh',
-      '@rect-three'
-    ],
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,

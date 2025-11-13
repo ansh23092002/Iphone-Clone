@@ -20,21 +20,21 @@ const Model = () => {
     });
 
     // changeing the 3D moble small to large 
-    const tl = gsap.timeline();
+    const tl = useRef(gsap.timeline());
     useEffect(() => {
       if(size ==="large") {
-        animateWithGsapTimeline(tl,small , smallRotation, "#view1","#view2",{
+        animateWithGsapTimeline(tl.current,small , smallRotation, "#view1","#view2",{
           transform: 'translateX(-100%)',
           duration:1
         })
       } if(size=== "small"){
-            animateWithGsapTimeline(tl,large,  largeRotation, "#view2","#view1",{
+            animateWithGsapTimeline(tl.current,large,  largeRotation, "#view2","#view1",{
             transform: 'translateX(0)',
           duration:1
         })
       }
      
-    }, [size]);
+    }, [size, largeRotation, smallRotation]);
 
     // camera contol for the model  view 
     const cameraControlSmall = useRef();
@@ -48,6 +48,10 @@ const Model = () => {
     const small  = useRef(new THREE.Group());// for small model 
      const large  = useRef(new THREE.Group());// for large model 
 
+    // View container refs
+    const view1Ref = useRef();
+    const view2Ref = useRef(); 
+
     useGSAP(()=>{
            gsap.to('#heading',{y:0, opacity:1}) 
     },[]);
@@ -59,16 +63,17 @@ const Model = () => {
 
              <div className="flex flex-col items-center mt-5">
                 <div className="w-full h-[75vh] md:h-[90vh] overflow-hidden relative">
+                    <div ref={view1Ref} id="view1" className="w-full h-full absolute" />
+                    <div ref={view2Ref} id="view2" className="w-full h-full absolute right-[-100%]" />
+
+                    <Canvas className="w-full h-full" style={{position:'fixed',top:0, bottom:0,left:0, right:0,overflow:'hidden'}} eventPrefix="client">
+                    <View.Port />
                     <ModelView 
                     index={1} groupRef={small} gsapType="view1" controlRef={cameraControlSmall}
-                    setRotationState={setSmallRotation} item={model} size={size}/>
+                    setRotationState={setSmallRotation} item={model} size={size} trackRef={view1Ref}/>
                     <ModelView 
                     index={2} groupRef={large} gsapType="view2" controlRef={cameraControlLarge}
-                    setRotationState={setLargeRotation} item={model} size={size}/>
-
-                    <Canvas className="w-full h-full" style={{position:'fixed',top:0, bottom:0,left:0, right:0,overflow:'hidden'}}  eventsource={document.getElementById('root')}>
-                      
-                    <View.Port/>    
+                    setRotationState={setLargeRotation} item={model} size={size} trackRef={view2Ref}/>
                     </Canvas>
                 </div>
                 <div className="mx-auto w-full"> 
