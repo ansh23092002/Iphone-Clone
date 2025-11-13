@@ -19,6 +19,18 @@ const Model = () => {
         img: yellowImg,
     });
 
+    // camera contol for the model  view 
+    const cameraControlSmall = useRef();
+    const cameraControlLarge = useRef();
+
+    //Rotation 
+    const [smallRotation,setSmallRotation] =useState(0);
+    const [largeRotation, setLargeRotation] = useState(0);
+    
+    // Three Gs use {camera control }
+    const small  = useRef(new THREE.Group());// for small model 
+     const large  = useRef(new THREE.Group());// for large model
+
     // changeing the 3D moble small to large 
     const tl = useRef(gsap.timeline());
     useEffect(() => {
@@ -34,19 +46,7 @@ const Model = () => {
         })
       }
      
-    }, [size, largeRotation, smallRotation]);
-
-    // camera contol for the model  view 
-    const cameraControlSmall = useRef();
-    const cameraControlLarge = useRef();
-
-    //Rotation 
-    const [smallRotation,setSmallRotation] =useState(0);
-    const [largeRotation, setLargeRotation] = useState(0);
-    
-    // Three Gs use {camera control }
-    const small  = useRef(new THREE.Group());// for small model 
-     const large  = useRef(new THREE.Group());// for large model 
+    }, [size, largeRotation, smallRotation]); 
 
     // View container refs
     const view1Ref = useRef();
